@@ -1,12 +1,16 @@
 <template>
   <div id="User">
-    <h2>
-      Hola, <span>{{ username }}</span
-      >. ¡Bienvenido!
-    </h2>
     <input v-model="user" placeholder="Usuario" />
     <input v-model="password" type="password" placeholder="Contraseña" />
     <button v-if="user && password" v-on:click="login">Iniciar sesión</button>
+    <br>
+    <h2 v-if="logueado">
+      Hola, <span>{{ userLogeado.user }}</span
+      >. ¡Bienvenido! tu id es {{ userLogeado.id }}
+    </h2>
+    <h2 v-if="mensaje">
+      <span>{{mensaje}}</span>
+    </h2>
   </div>
 </template>
 
@@ -22,34 +26,46 @@ export default {
       username: "none",
       user: "",
       password: "",
+      logueado:false,
+      mensaje:"",
+      userLogeado:{}
     };
   },
   created: function () {},
   methods: {
     login: function () {
       let self = this;
-
-      let id = "5c9beed4a34c1303f3371a39";
-            let body =  { 
-                query: `
-                    query {
-            userLogin(user: "anibal",password: "guerra") {
-              user
-              password
-            }
-          }
-                `, 
-                variables: {}
-            }
-            let options = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            axios.post("http://localhost/graphiql",body, options)
-                .then((response)=>{
-                    console.log(response);
-                });
+self.logueado=false;
+      axios
+        .post(`http://localhost/graphql?`,{
+			query: ` 
+				query ($user:String!, $password:String!){
+					userLogin(user: $user, password: $password){
+						id,
+						user,
+            password
+					}
+				}
+			`,
+			variables: {
+				user: self.user,
+				password: self.password
+			}
+		})
+       .then((res) => {
+           if(res.data.data.userLogin.length>0){
+             self.logueado=true;
+             self.userLogeado=res.data.data.userLogin[0];
+             self.mensaje="";
+           }else{
+             self.mensaje="Usuario o contraseña incorrecto!";
+           }
+         })
+         .catch((error) => {
+           self.mensaje="";
+           self.logueado=false;
+           console.error(error);
+         });
 
 
       // axios({
