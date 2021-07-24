@@ -6,7 +6,7 @@
       <nav>
         <button v-on:click="init" v-if="is_auth">Inicio</button>
         <button v-on:click="categories" v-if="is_auth">Categorías</button>
-        <button v-if="is_auth">Productos</button>
+        <button v-on:click="products" >Productos</button>
         <button v-if="is_auth">Cerrar Sesión</button>
       </nav>
     </div>
@@ -47,18 +47,41 @@
         }
       },
 
+      products: function(){
+        if(this.$route.name != "products"){
+          let username = localStorage.getItem("current_username")
+          this.$router.push({name: "products", params:{ username: username }})
+        }
+      },
+
     },
 
     beforeCreate: function(){
-      localStorage.setItem('current_username', 'Jeisson')
+      localStorage.setItem('current_username', 'Anibal')
       localStorage.setItem('isAuth', true)
 
-      this.$router.push({name: "user", params:{ username: 'Jeisson'}})
+      this.$router.push({name: "user", params:{ username: 'Anibal'}})
     }
   }
 </script>
 
 <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
   body{
     margin: 0 0 0 0;
   }
