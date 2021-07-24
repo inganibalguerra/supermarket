@@ -4,11 +4,10 @@
       Usuario autenticado: <span>{{ username }}</span>
     </h2>
 
-    <input v-model="product.category" />
-    <input v-model="product.name" />
-    <input v-model="product.description" />
+    <input v-model="product.name" placeholder="Nombre" />
+    <input v-model="product.description" placeholder="Descripción"/>
     <button
-      v-if="product.category && product.name && product.description"
+      v-if="product.name && product.description"
       v-on:click="createCategory"
     >
       Crear categoria
@@ -74,6 +73,7 @@ export default {
       axios
         .post("http://localhost:4000/categories/", self.product)
         .then((result) => {
+            self.product={};
           (self.category_id_rest = result.data.id),
             (self.category_id = result.data.id),
             (self.name = result.data.name),
