@@ -2,6 +2,7 @@
     <div id="Categories">
         <h2>Usuario autenticado: <span>{{username}}</span></h2>
         <button v-on:click="getCategory">Obtener categoría</button>
+        <input v-model="category_id_rest"/>
         <h2>La categoría con id = <span>{{category_id}}</span>, tiene el nombre <span>{{name}}</span> y su descripción es «<span>{{description}}</span>».</h2>
     </div>
 </template>
@@ -16,6 +17,7 @@
 
         data: function (){
             return {
+                category_id_rest: "",
                 category_id: "",
                 name: "",
                 description: ""
@@ -36,13 +38,16 @@
                 this.username = this.$route.params.username
                 let self = this
 
-                axios.get("http://localhost:4000/categories/" + 2)
+                axios.get("http://localhost:4000/categories/" + self.category_id_rest)
                     .then((result) => {
                         self.category_id = result.data.id,
                         self.name = result.data.name,
                         self.description = result.data.description
                     })
                     .catch((error) => {
+                        self.category_id = null;
+                        self.name = null;
+                        self.description = null;
                         alert("ERROR de Servidor");
                     });
             }
