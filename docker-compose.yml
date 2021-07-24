@@ -5,7 +5,8 @@ services:
     ports:
         - 3306:3306
   supermarket_ms:
-    image: supermarket_ms:tarea
+    build:
+      context: ./supermarket_ms
     ports:
       - 4000:4000
     environment:
