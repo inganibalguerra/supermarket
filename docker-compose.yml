@@ -1,0 +1,41 @@
+version: "3"
+services:
+  supermarket_db:
+    image: supermarket_db
+    ports:
+        - 3306:3306
+  supermarket_ms:
+    image: supermarket_ms:tarea
+    ports:
+      - 4000:4000
+    environment:
+      - DB_HOST=supermarket_db
+      - DB_PORT=3306
+      - DB_USER=supermarket
+      - DB_PASSWORD=2021
+      - DB_NAME=supermarket_db
+      - URL=0.0.0.0:4000
+    depends_on:
+      - "supermarket_db"
+  supermarket_api:
+    build:
+      context: ./supermarket_api
+    ports:
+      - 5000:5000
+    depends_on:
+      - "supermarket_ms"
+  supermarket_proxy:
+    build:
+      context: ./supermarket_proxy
+    ports:
+      - 80:80
+    depends_on:
+      - "supermarket_api"
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8080:80
+    links:
+      - "supermarket_db:db"
+    depends_on:
+      - "supermarket_db"
