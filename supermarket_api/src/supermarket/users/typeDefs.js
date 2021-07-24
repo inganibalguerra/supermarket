@@ -1,25 +1,21 @@
 export const userTypeDef = `
   type User {
       id: Int!
-      name: String!
-      email: String!
+      user: String!
+      password: String!
   }
-  type user {
-    id: Int!
-    name: String!
-    email: String!
-  }  
   input UserInput {
-      name: String!
-      email: String!  
+      user: String!
+      password: String!  
   }
 
   `;
- 
+
 export const userQueries = `
       allUsers: [User]!
-      userById(id: Int!): User!
+      userLogin(user: String!,password: String!): [User]!
   `;
+
 
 export const userMutations = `
     createUser(user: UserInput!): User!
@@ -30,9 +26,9 @@ export const userMutations = `
 
 // query {
 //     allUsers {
-//       name,
+//       user,
 //       description,
-//       user{id,name,description},
+//       user{id,user,description},
 //       unit_measurement,
 //       quantity
       
@@ -43,13 +39,13 @@ export const userMutations = `
 
 // mutation {
 //   createUser(user: {
-//     name: "papel",
+//     user: "papel",
 //     description: "papel dasdasdasd",
 //     user:2,
 //     unit_measurement:"Units"
 //     quantity:10
 //   }) {
-//     name
+//     user
     
 //   }
 // }
